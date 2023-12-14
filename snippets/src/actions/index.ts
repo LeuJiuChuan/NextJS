@@ -1,6 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
+import { revalidatePath } from "next/cache";
 
 export async function editSnippet(id: number, code: string) {
   console.log("edit snippet called");
@@ -8,6 +9,7 @@ export async function editSnippet(id: number, code: string) {
     where: { id },
     data: { code },
   });
+  revalidatePath(`/snippets/${id}`)
   redirect(`/snippets/${id}`);
 }
 
@@ -57,6 +59,7 @@ export async function createSnippet(
       };
     }
   }
+  revalidatePath('/')
   //   Redirect the user back to the root route
   //never put redirect statement in trycatch
   redirect("/");
